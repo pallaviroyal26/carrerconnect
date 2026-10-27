@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CareerConnect</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #333;
+        }
+
+        nav {
+            background: #173b9b;
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .login-container {
+            max-width: 430px;
+            margin: 60px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #173b9b;
+            text-align: center;
+            margin-top: 0;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 7px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 22px;
+            background: #173b9b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #102d78;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .register-link a {
+            color: #173b9b;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                margin: 30px 15px;
+                padding: 22px;
+            }
+
+            nav a {
+                margin-left: 8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h2>CareerConnect</h2>
+        <div>
+            <a href="index.html">Home</a>
+            <a href="index.html#jobs">Jobs</a>
+            <a href="register.html">Register</a>
+        </div>
+    </nav>
+
+    <div class="login-container">
+        <h1>Welcome Back!</h1>
+        <p class="subtitle">Login to continue your job search.</p>
+
+        <form id="login-form">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" required
+                   placeholder="Enter your registered email">
+
+            <label for="password">Password *</label>
+            <input type="password" id="password" required
+                   placeholder="Enter your password">
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p id="message" role="status"></p>
+
+        <p class="register-link">
+            Don't have an account?
+            <a href="register.html">Create an account</a>
+        </p>
+    </div>
+
+    <script>
+       
+
+    document.getElementById("login-form")
+        .addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById("email")
+                .value.trim().toLowerCase();
+
+            const password = document.getElementById("password").value;
+            const message = document.getElementById("message");
+
+            // Read accounts from the same storage key as registration.
+            const accounts = JSON.parse(
+                localStorage.getItem("careerConnectAccounts") || "[]"
+            );
+
+            const account = accounts.find(function(user) {
+                return user.email === email &&
+                       user.password === password;
+            });
+
+            if (account) {
+                message.style.color = "green";
+                message.textContent =
+                    "Login successful! Welcome, " + account.name + "!";
+
+                localStorage.setItem(
+                    "loggedInUser",
+                    account.email
+                );
+
+                setTimeout(function() {
+                    window.location.href = "index.html";
+                }, 1000);
+            } else {
+                message.style.color = "red";
+                message.textContent =
+                    "Invalid email or password. Please try again.";
+            }
+        });
+</script>
+
+    
+
+</body>
+</html>

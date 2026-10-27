@@ -1,0 +1,537 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - CareerConnect</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6fb;
+            color: #333;
+        }
+
+        nav {
+            background: #173bb5;
+            color: white;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav h2 {
+            margin: 0;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 18px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px #00000012;
+        }
+
+        h1 {
+            color: #173bb5;
+            text-align: center;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #173bb5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin: auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 90px;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            background: #173bb5;
+            color: white;
+            padding: 12px 22px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background: #102b87;
+        }
+
+        .secondary {
+            background: #666;
+        }
+
+        #message {
+            text-align: center;
+            color: green;
+            margin-top: 18px;
+        }
+
+        footer {
+            background: #173bb5;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            nav {
+                justify-content: center;
+            }
+
+            nav a {
+                margin: 5px;
+            }
+
+            .container {
+                margin: 20px 12px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <h2>CareerConnect</h2>
+        <div>
+            <a href="index.html">Home</a>
+            <a href="index.html#jobs">Jobs</a>
+            <a href="profile.html">Profile</a>
+            <a href="saved-jobs.html">Saved Jobs</a>
+            <a href="my-applications.html">My Applications</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <h1>My Profile</h1>
+
+        <div class="profile-header">
+            <div class="avatar" id="avatar">U</div>
+            <h2 id="display-name">Your Name</h2>
+            <p>Manage your career information</p>
+        </div>
+
+        <form id="profile-form">
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" required
+                           placeholder="Enter your full name">
+                </div>
+
+                <div class="field">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" required
+                           placeholder="Enter your email">
+                </div>
+
+                <div class="field">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone"
+                           pattern="[0-9]{10}"
+                           minlength="10" 
+                           maxlength="10"
+                           inputmode="numeric"
+                           placeholder="10-digit mobile number" required>
+                </div>
+
+                <div class="field">
+                    <label for="location">Location *</label>
+                    <input type="text" id="location"
+                           placeholder="City, State" required>
+                </div>
+
+                <div class="field">
+                    <label for="qualification">Qualification *</label>
+                    <select id="qualification" required>
+                        <option value="">Select qualification</option>
+                        <option>B.Tech / B.E.</option>
+                        <option>B.Sc.</option>
+                        <option>BCA</option>
+                        <option>MCA</option>
+                        <option>M.Tech / M.E.</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="experience">Experience *</label>
+                    <select id="experience" required>
+                        <option value="">Select experience</option>
+                        <option>Fresher</option>
+                        <option>Less than 1 year</option>
+                        <option>1–3 years</option>
+                        <option>3+ years</option>
+                    </select>
+                </div>
+
+                <div class="field full-width">
+                    <label for="skills">Technical Skills *</label>
+                    <input type="text" id="skills"
+                           placeholder="Java, SQL, HTML, CSS" required>
+                </div>
+
+              <div class="field full-width">
+    <label for="resume">Upload Resume (PDF only) *</label>
+    <input type="file" id="resume"
+           accept=".pdf,application/pdf" required>
+    <small id="resume-status">No resume selected.</small>
+    <a id="resume-download" hidden target="_blank"
+       rel="noopener">View uploaded resume</a>
+</div>
+
+                <div class="field full-width">
+                    <label for="about">About Me *</label>
+                    <textarea id="about" required
+                              placeholder="Write a short professional summary"></textarea>
+                </div>
+
+            </div>
+
+            <div class="actions">
+                <button type="submit">Save Profile</button>
+                <button type="button" class="secondary"
+                        id="clear-button">Clear Form</button>
+            </div>
+
+            <p id="message" role="status"></p>
+        </form>
+    </main>
+
+    <footer>
+        <h3>CareerConnect</h3>
+        <p>Find your dream job and build your career.</p>
+        <p>© 2026 CareerConnect. All rights reserved.</p>
+    </footer>
+
+    
+<script>
+const form = document.getElementById("profile-form");
+const message = document.getElementById("message");
+
+const fields = [
+    "name", "email", "phone", "location",
+    "qualification", "experience", "skills", "about"
+];
+
+const resumeInput = document.getElementById("resume");
+const resumeStatus = document.getElementById("resume-status");
+const resumeDownload = document.getElementById("resume-download");
+
+let resumeUrl = "";
+
+// Open the browser database
+function openResumeDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("CareerConnectDB", 1);
+
+        request.onupgradeneeded = function () {
+            const db = request.result;
+
+            if (!db.objectStoreNames.contains("resumes")) {
+                db.createObjectStore("resumes");
+            }
+        };
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+// Save the PDF
+async function saveResume(file) {
+    const db = await openResumeDB();
+
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction("resumes", "readwrite");
+
+        transaction.objectStore("resumes").put(file, "profileResume");
+
+        transaction.oncomplete = () => {
+            db.close();
+            resolve();
+        };
+
+        transaction.onerror = () => {
+            db.close();
+            reject(transaction.error);
+        };
+    });
+}
+
+// Retrieve the saved PDF
+async function getResume() {
+    const db = await openResumeDB();
+
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction("resumes", "readonly");
+        const request = transaction.objectStore("resumes").get("profileResume");
+
+        request.onsuccess = () => {
+            const file = request.result || null;
+            db.close();
+            resolve(file);
+        };
+
+        request.onerror = () => {
+            db.close();
+            reject(request.error);
+        };
+    });
+}
+
+// Display the PDF link
+function displayResume(file) {
+    if (resumeUrl) {
+        URL.revokeObjectURL(resumeUrl);
+        resumeUrl = "";
+    }
+
+    if (!file) {
+        resumeStatus.textContent = "No resume selected.";
+        resumeDownload.hidden = true;
+        resumeDownload.removeAttribute("href");
+        return;
+    }
+
+    resumeUrl = URL.createObjectURL(file);
+
+    resumeStatus.textContent = "Saved resume: " + file.name;
+    resumeDownload.href = resumeUrl;
+    resumeDownload.hidden = false;
+}
+
+// Handle PDF selection
+resumeInput.addEventListener("change", async function () {
+    const file = this.files[0];
+
+    if (!file) return;
+
+    if (
+        file.type !== "application/pdf" ||
+        !file.name.toLowerCase().endsWith(".pdf")
+    ) {
+        alert("Please select a valid PDF file.");
+        this.value = "";
+        return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        alert("Resume must be smaller than 5 MB.");
+        this.value = "";
+        return;
+    }
+
+    try {
+        await saveResume(file);
+        displayResume(file);
+        message.textContent = "Resume saved successfully!";
+    } catch (error) {
+        console.error(error);
+        alert("Could not save the resume.");
+    }
+});
+
+// Update the profile heading and avatar
+function updateHeader() {
+    const name = document.getElementById("name").value.trim();
+
+    document.getElementById("display-name").textContent =
+        name || "Your Name";
+
+    document.getElementById("avatar").textContent =
+        name ? name.charAt(0).toUpperCase() : "U";
+}
+
+// Load saved profile and resume
+async function loadProfile() {
+    try {
+        const saved = localStorage.getItem("careerConnectProfile");
+
+        if (saved) {
+            const profile = JSON.parse(saved);
+
+            fields.forEach(field => {
+                document.getElementById(field).value =
+                    profile[field] || "";
+            });
+        }
+
+        const file = await getResume();
+
+        displayResume(file);
+        updateHeader();
+    } catch (error) {
+        console.error(error);
+        message.textContent = "Could not load saved profile.";
+    }
+}
+
+// Save profile details
+document.getElementById("name").addEventListener(
+    "input", updateHeader
+);
+
+form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (!form.reportValidity()) return;
+    try {
+    const savedResume = await getResume();
+
+    if (!resumeInput.files[0] && !savedResume) {
+        message.textContent = "Please upload your PDF resume.";
+        message.style.color = "red";
+        resumeInput.focus();
+        return;
+    }
+} catch (error) {
+    message.textContent = "Could not verify your saved resume.";
+    message.style.color = "red";
+    return;
+}
+
+    const profile = {};
+
+    fields.forEach(field => {
+        profile[field] =
+            document.getElementById(field).value.trim();
+    });
+
+    try {
+        localStorage.setItem(
+            "careerConnectProfile",
+            JSON.stringify(profile)
+        );
+
+        updateHeader();
+        message.textContent = "Profile saved successfully!";
+    } catch (error) {
+        console.error(error);
+        alert("Could not save profile details.");
+    }
+});
+
+// Clear profile and saved PDF
+document.getElementById("clear-button").addEventListener(
+    "click", async function () {
+        if (!confirm("Clear all profile details and the saved resume?")) {
+            return;
+        }
+
+        try {
+            const db = await openResumeDB();
+
+            await new Promise((resolve, reject) => {
+                const transaction = db.transaction("resumes", "readwrite");
+
+                transaction.objectStore("resumes").delete("profileResume");
+
+                transaction.oncomplete = resolve;
+                transaction.onerror = () => reject(transaction.error);
+            });
+
+            db.close();
+
+            localStorage.removeItem("careerConnectProfile");
+
+            form.reset();
+            resumeInput.value = "";
+
+            displayResume(null);
+            updateHeader();
+
+            message.textContent = "Profile and resume cleared.";
+        } catch (error) {
+            console.error(error);
+            alert("Could not clear all saved data.");
+        }
+    }
+);
+
+// Initialize the page
+loadProfile();
+</script>
+
+</body>
+</html>

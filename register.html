@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - CareerConnect</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .register-container {
+            max-width: 480px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .register-container h1 {
+            text-align: center;
+            color: #173b8f;
+        }
+
+        .register-container label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .register-container input {
+            width: 100%;
+            padding: 11px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .register-container button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 12px;
+            background: #173b8f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .register-container button:hover {
+            background: #102b70;
+        }
+
+        .register-container p {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        #register-message {
+            overflow-wrap: anywhere;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <h2>CareerConnect</h2>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="jobs.html">Jobs</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="register-container">
+        <h1>Create Account</h1>
+        <p>Join CareerConnect and explore job opportunities.</p>
+
+        <form id="register-form">
+            <label for="register-name">Full Name *</label>
+            <input type="text" id="register-name"
+                   minlength="2" autocomplete="name" required>
+
+            <label for="register-email">Email Address *</label>
+            <input type="email" id="register-email"
+                   autocomplete="email" required>
+
+            <label for="register-password">Password *</label>
+            <input type="password" id="register-password"
+                   minlength="8" autocomplete="new-password"
+                   required>
+            <small>Use at least 8 characters.</small>
+
+            <label for="confirm-password">Confirm Password *</label>
+            <input type="password" id="confirm-password"
+                   minlength="8" autocomplete="new-password"
+                   required>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <p id="register-message" role="status"></p>
+
+        <p>Already have an account?
+            <a href="login.html">Login here</a>
+        </p>
+    </main>
+
+    <footer class="footer">
+        <h3>CareerConnect</h3>
+        <p>Find your dream job and build your career.</p>
+        <p>&copy; 2026 CareerConnect. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const registerForm = document.getElementById("register-form");
+        const registerMessage = document.getElementById("register-message");
+
+        registerForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("register-name").value.trim();
+            const email = document.getElementById("register-email")
+                .value.trim().toLowerCase();
+            const password = document.getElementById("register-password").value;
+            const confirmPassword =
+                document.getElementById("confirm-password").value;
+
+            if (password !== confirmPassword) {
+                registerMessage.textContent = "Passwords do not match.";
+                registerMessage.style.color = "red";
+                return;
+            }
+
+            if (password.length < 8) {
+                registerMessage.textContent =
+                    "Password must contain at least 8 characters.";
+                registerMessage.style.color = "red";
+                return;
+            }
+
+            const accounts = JSON.parse(
+                localStorage.getItem("careerConnectAccounts") || "[]"
+            );
+
+            const accountExists = accounts.some(
+                account => account.email === email
+            );
+
+            if (accountExists) {
+                registerMessage.textContent =
+                    "An account with this email already exists.";
+                registerMessage.style.color = "red";
+                return;
+            }
+
+            // Demo only: do not store real passwords in browser storage.
+            // Replace with secure server-side authentication for production.
+            accounts.push({
+                name: name,
+                email: email,
+                password: password
+            });
+
+            localStorage.setItem(
+                "careerConnectAccounts",
+                JSON.stringify(accounts)
+            );
+
+            registerForm.reset();
+            registerMessage.textContent =
+                "Registration successful! You can now go to Login.";
+            registerMessage.style.color = "green";
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for a Job - CareerConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .application-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .application-container h1 {
+            color: #173b8f;
+            text-align: center;
+        }
+
+        .application-container label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .application-container input {
+            width: 100%;
+            padding: 11px;
+            margin-top: 7px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .application-container button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 12px;
+            background: #173b8f;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #application-message {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar">
+            <h2>CareerConnect</h2>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#jobs">Jobs</a>
+                <a href="profile.html">Profile</a>
+                <a href="saved-jobs.html">Saved Jobs</a>
+                <a href="contact.html">Contact</a>
+                <a href="login.html">Login</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="application-container">
+        <h1>Job Application</h1>
+
+        <p>Applying for: <strong id="application-job-title"></strong></p>
+
+        <form id="application-form">
+            
+<label for="applicant-name">Full Name *</label>
+<input
+    type="text"
+    id="applicant-name"
+    name="applicant-name"
+    minlength="2"
+    required
+>
+
+<label for="applicant-email">Email Address *</label>
+<input
+    type="email"
+    id="applicant-email"
+    name="applicant-email"
+    required
+>
+
+<label for="applicant-phone">Phone Number *</label>
+<input
+    type="tel"
+    id="applicant-phone"
+    name="applicant-phone"
+    pattern="[0-9]{10}"
+    minlength="10"
+    maxlength="10"
+    inputmode="numeric"
+    title="Enter exactly 10 digits"
+    required
+>
+
+<label for="applicant-resume">Upload Resume (PDF only) *</label>
+<input
+    type="file"
+    id="applicant-resume"
+    name="applicant-resume"
+    accept=".pdf,application/pdf"
+    required
+>
+
+>
+
+
+            <button type="submit">Submit Application</button>
+        </form>
+
+        <p id="application-message" role="status"></p>
+    </main>
+
+    <footer class="footer">
+        <h3>CareerConnect</h3>
+        <p>Find your dream job and build your career.</p>
+        <p>&copy; 2026 CareerConnect. All rights reserved.</p>
+    </footer>
+
+    <script src="js/jobs.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const jobId = Number(params.get("id"));
+
+        const selectedJob = jobs.find(function(job) {
+            return job.id === jobId;
+        });
+
+        const jobTitle = document.getElementById("application-job-title");
+        const form = document.getElementById("application-form");
+        const message = document.getElementById("application-message");
+
+        if (selectedJob) {
+            jobTitle.textContent = selectedJob.title;
+        } else {
+            jobTitle.textContent = "Job not found";
+            form.hidden = true;
+            message.textContent = "Please return to the Jobs page and select a job.";
+        }
+
+       
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    if (!selectedJob) {
+        message.textContent = "Please select a valid job first.";
+        message.style.color = "red";
+        return;
+    }
+
+    const resumeInput = document.getElementById("applicant-resume");
+    const resumeFile = resumeInput.files[0];
+
+    if (!resumeFile) {
+        message.textContent = "Please upload your resume in PDF format.";
+        message.style.color = "red";
+        return;
+    }
+
+    if (
+        resumeFile.type !== "application/pdf" ||
+        !resumeFile.name.toLowerCase().endsWith(".pdf")
+    ) {
+        message.textContent = "Please select a valid PDF resume.";
+        message.style.color = "red";
+        return;
+    }
+
+    if (resumeFile.size > 5 * 1024 * 1024) {
+        message.textContent = "Resume must be smaller than 5 MB.";
+        message.style.color = "red";
+        return;
+    }
+
+    let db;
+
+    try {
+        const request = indexedDB.open("CareerConnectDB", 2);
+
+        db = await new Promise((resolve, reject) => {
+            request.onupgradeneeded = function() {
+                const database = request.result;
+
+                if (!database.objectStoreNames.contains("applicationResumes")) {
+                    database.createObjectStore("applicationResumes");
+                }
+            };
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+
+        const applicationId = Date.now();
+
+        await new Promise((resolve, reject) => {
+            const transaction = db.transaction(
+                "applicationResumes",
+                "readwrite"
+            );
+
+            transaction.objectStore("applicationResumes").put(
+                resumeFile,
+                applicationId
+            );
+
+            transaction.oncomplete = resolve;
+            transaction.onerror = () => reject(transaction.error);
+            transaction.onabort = () => reject(transaction.error);
+        });
+
+        const application = {
+            applicationId: applicationId,
+            jobId: selectedJob.id,
+            jobTitle: selectedJob.title,
+            company: selectedJob.company,
+            name: document.getElementById("applicant-name").value.trim(),
+            email: document.getElementById("applicant-email").value.trim(),
+            phone: document.getElementById("applicant-phone").value.trim(),
+            resumeName: resumeFile.name,
+            submittedAt: new Date().toLocaleString(),
+            status: "Submitted"
+        };
+
+        const applications = JSON.parse(
+            localStorage.getItem("applications") || "[]"
+        );
+
+        applications.push(application);
+
+        localStorage.setItem("applications", JSON.stringify(applications));
+
+        form.reset();
+        message.textContent = "Application submitted successfully!";
+        message.style.color = "green";
+
+    } catch (error) {
+        console.error("Application submission failed:", error);
+
+        message.textContent =
+            "Could not save application: " +
+            (error.message || "Please check browser storage.");
+        message.style.color = "red";
+
+    } finally {
+        if (db) db.close();
+    }
+});
+
+
+    </script>
+
+</body>
+</html>
